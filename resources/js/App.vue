@@ -39,10 +39,16 @@
         init() {
           this.loading = true;
           this.req.get("auth/init").then(response => {
-            console.log("response value is",response);
-            this.user = response.data.user;
-            this.loading = false;
-            this.initiated = true;
+            console.log("response one value is",response);
+            if(response.data.user){
+              this.user = response.data.user;
+              this.loading = false;
+              this.initiated = true;
+              this.$router.push("/job");
+            }else{
+              this.loading = false;
+              this.initiated = true;
+            }
           })
         },
       }

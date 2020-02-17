@@ -20,6 +20,11 @@
              <router-link :to="{ name: 'register' }" class="dropdown-item">Register</router-link>
              </div>
              <a v-else href="javascript:;" @click="logout" class="dropdown-item">Logout</a>
+             <div v-if="app.user">
+                <a v-if="!app.user.is_two_factor_enabled" href="/setup-2fa" class="dropdown-item">Enable TFA</a>
+                <a v-if="app.user.is_two_factor_enabled" href="/setup-2fa" class="dropdown-item">Disable TFA</a>
+                
+             </div>
           </div>
           </li>
         </ul>

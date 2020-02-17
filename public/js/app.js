@@ -1951,10 +1951,18 @@ __webpack_require__.r(__webpack_exports__);
 
       this.loading = true;
       this.req.get("auth/init").then(function (response) {
-        console.log("response value is", response);
-        _this.user = response.data.user;
-        _this.loading = false;
-        _this.initiated = true;
+        console.log("response one value is", response);
+
+        if (response.data.user) {
+          _this.user = response.data.user;
+          _this.loading = false;
+          _this.initiated = true;
+
+          _this.$router.push("/job");
+        } else {
+          _this.loading = false;
+          _this.initiated = true;
+        }
       });
     }
   }
@@ -2221,7 +2229,11 @@ __webpack_require__.r(__webpack_exports__);
         this.app.req.post("auth/login", data).then(function (response) {
           _this.app.user = response.data;
 
-          _this.$router.push("/job");
+          if (_this.app.user.is_two_factor_enabled) {
+            window.location.href = 'verify-2fa';
+          } else {
+            window.location.href = 'setup-2fa';
+          }
         })["catch"](function (error) {
           console.log("error value is", error);
 
@@ -2243,6 +2255,11 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
 //
 //
 //
@@ -21125,7 +21142,33 @@ var render = function() {
                       on: { click: _vm.logout }
                     },
                     [_vm._v("Logout")]
-                  )
+                  ),
+              _vm._v(" "),
+              _vm.app.user
+                ? _c("div", [
+                    !_vm.app.user.is_two_factor_enabled
+                      ? _c(
+                          "a",
+                          {
+                            staticClass: "dropdown-item",
+                            attrs: { href: "/setup-2fa" }
+                          },
+                          [_vm._v("Enable TFA")]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.app.user.is_two_factor_enabled
+                      ? _c(
+                          "a",
+                          {
+                            staticClass: "dropdown-item",
+                            attrs: { href: "/setup-2fa" }
+                          },
+                          [_vm._v("Disable TFA")]
+                        )
+                      : _vm._e()
+                  ])
+                : _vm._e()
             ]
           )
         ])

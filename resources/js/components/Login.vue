@@ -63,7 +63,11 @@
                     }
                     this.app.req.post("auth/login",data).then(response => {
                         this.app.user = response.data;
-                        this.$router.push("/job");
+                        if(this.app.user.is_two_factor_enabled){
+                           window.location.href = 'verify-2fa';
+                        }else{
+                            window.location.href = 'setup-2fa';
+                        }
                     }).catch(error => {
                         console.log("error value is",error);
                         this.errors.push(error.response.data.error);
